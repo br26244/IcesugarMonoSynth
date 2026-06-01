@@ -1,0 +1,4 @@
+/build
+/output
+spi/pico_sdk_import.cmake
+pico_sdk_import.cmake
