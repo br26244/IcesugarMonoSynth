@@ -1,22 +1,15 @@
-// FPGA C3 square-wave SPI audio stream
-// IceSugar Pro / Lattice ECP5, 3.3V LVCMOS
-
 LOCATE COMP "clk" SITE "P6";
 INPUT PORT "clk" IO_TYPE=LVCMOS33;
 
-// FPGA E1 -> Pico GP10/SCK
 LOCATE COMP "spiSck" SITE "E1";
 IOBUF PORT "spiSck" IO_TYPE=LVCMOS33;
 
-// FPGA C2 -> Pico GP12/RX
 LOCATE COMP "spiMosi" SITE "C2";
 IOBUF PORT "spiMosi" IO_TYPE=LVCMOS33;
 
-// FPGA D1 -> Pico GP13/CSn
 LOCATE COMP "spiCsn" SITE "D1";
 IOBUF PORT "spiCsn" IO_TYPE=LVCMOS33;
 
-// Rotary encoder, active-low switch contacts with FPGA pull-ups
 LOCATE COMP "encSw" SITE "T6";
 IOBUF PORT "encSw" IO_TYPE=LVCMOS33 PULLMODE=UP;
 
@@ -26,7 +19,6 @@ IOBUF PORT "encDt" IO_TYPE=LVCMOS33 PULLMODE=UP;
 LOCATE COMP "encClk" SITE "R5";
 IOBUF PORT "encClk" IO_TYPE=LVCMOS33 PULLMODE=UP;
 
-// Low-pass filter rotary encoder, active-low switch contacts with FPGA pull-ups
 LOCATE COMP "lpSw" SITE "R6";
 IOBUF PORT "lpSw" IO_TYPE=LVCMOS33 PULLMODE=UP;
 
@@ -36,7 +28,6 @@ IOBUF PORT "lpDt" IO_TYPE=LVCMOS33 PULLMODE=UP;
 LOCATE COMP "lpClk" SITE "T4";
 IOBUF PORT "lpClk" IO_TYPE=LVCMOS33 PULLMODE=UP;
 
-// Voice control buttons, active-low with FPGA pull-ups
 LOCATE COMP "squareBtn" SITE "A3";
 IOBUF PORT "squareBtn" IO_TYPE=LVCMOS33 PULLMODE=UP;
 
