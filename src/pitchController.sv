@@ -4,46 +4,39 @@
 module pitchController #(
     parameter MINSTEP = 0,
     parameter MAXSTEP = 48,
-    parameter RESETSTEP = 12
+    parameter RESETSTEP = 12,
+    parameter STEPSIZE = 1
 ) (
     input wire clk,
-    input wire selectSaw,
+    input wire enable,
     input wire pitchPressed,
     input wire pitchStepUp,
     input wire pitchStepDown,
-    output reg [5:0] squarePitchStep,
-    output reg [5:0] sawPitchStep
+    output reg [5:0] pitchStep
 );
 
     always @(posedge clk) begin
-        if (pitchPressed) begin
-            if (selectSaw) begin
-                sawPitchStep <= RESETSTEP[5:0];
-            end else begin
-                squarePitchStep <= RESETSTEP[5:0];
-            end
-        end else if (pitchStepUp) begin
-            if (selectSaw) begin
-                if (sawPitchStep != MAXSTEP[5:0]) begin
-                    sawPitchStep <= sawPitchStep + 1'b1;
+        if (enable) begin
+            if (pitchPressed) begin
+                pitchStep <= RESETSTEP[5:0];
+            end else if (pitchStepUp) begin
+                if (pitchStep + STEPSIZE[5:0] <= MAXSTEP[5:0]) begin
+                    pitchStep <= pitchStep + STEPSIZE[5:0];
+                end else begin
+                    pitchStep <= MAXSTEP[5:0];
                 end
-            end else if (squarePitchStep != MAXSTEP[5:0]) begin
-                squarePitchStep <= squarePitchStep + 1'b1;
-            end
-        end else if (pitchStepDown) begin
-            if (selectSaw) begin
-                if (sawPitchStep != MINSTEP[5:0]) begin
-                    sawPitchStep <= sawPitchStep - 1'b1;
+            end else if (pitchStepDown) begin
+                if (pitchStep >= MINSTEP[5:0] + STEPSIZE[5:0]) begin
+                    pitchStep <= pitchStep - STEPSIZE[5:0];
+                end else begin
+                    pitchStep <= MINSTEP[5:0];
                 end
-            end else if (squarePitchStep != MINSTEP[5:0]) begin
-                squarePitchStep <= squarePitchStep - 1'b1;
             end
         end
     end
 
     initial begin
-        squarePitchStep = RESETSTEP[5:0];
-        sawPitchStep    = RESETSTEP[5:0];
+        pitchStep = RESETSTEP[5:0];
     end
 
 endmodule

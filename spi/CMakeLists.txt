@@ -33,9 +33,28 @@ project(spi C CXX ASM)
 # Initialise the Raspberry Pi Pico SDK
 pico_sdk_init()
 
+include(FetchContent)
+set(LV_CONF_BUILD_DISABLE_THORVG_INTERNAL ON CACHE BOOL "" FORCE)
+set(LV_CONF_BUILD_DISABLE_EXAMPLES ON CACHE BOOL "" FORCE)
+set(LV_CONF_BUILD_DISABLE_DEMOS ON CACHE BOOL "" FORCE)
+FetchContent_Declare(
+        lvgl
+        GIT_REPOSITORY https://github.com/lvgl/lvgl.git
+        GIT_TAG v9.2.2
+        GIT_SHALLOW TRUE
+)
+FetchContent_MakeAvailable(lvgl)
+
+target_compile_definitions(lvgl PUBLIC LV_CONF_INCLUDE_SIMPLE)
+target_include_directories(lvgl PUBLIC ${CMAKE_CURRENT_LIST_DIR})
+
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(spi spi.c )
+add_executable(spi
+        spi.c
+        display_spi.c
+        synth_ui.c
+)
 
 pico_set_program_name(spi "spi")
 pico_set_program_version(spi "0.1")
@@ -48,7 +67,8 @@ pico_enable_stdio_usb(spi 1)
 target_link_libraries(spi
         pico_stdlib
         hardware_spi
-        hardware_gpio)
+        hardware_gpio
+        lvgl)
 
 # Add the standard include files to the build
 target_include_directories(spi PRIVATE
@@ -57,4 +77,3 @@ target_include_directories(spi PRIVATE
 
 
 pico_add_extra_outputs(spi)
-
