@@ -1,1 +1,1 @@
-# IcesugarMonoSynth
+# IcesugarPolySynth
